@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>تسجيل الدخول | DEZN</title><link rel="stylesheet" href="./style.css">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+.login-page{min-height:100vh;display:grid;place-items:center;padding:32px;background:#000}.login-box{width:min(430px,100%);background:#0d0d0d;border:1px solid #2b2b2b;padding:42px;border-radius:4px;box-shadow:0 20px 60px #000}.login-logo{display:block;width:100px;height:100px;object-fit:cover;margin:0 auto 24px}.login-box h1{text-align:center;margin:0 0 8px;font-size:30px}.hint{text-align:center;color:#aaa;margin:0 0 30px}.login-box label{display:block;margin:16px 0 8px}.login-box input{width:100%;box-sizing:border-box;background:#050505;color:#fff;border:1px solid #333;padding:14px;border-radius:3px;font:inherit;outline:none}.login-box input:focus{border-color:#777}.login-btn{width:100%;margin-top:24px;padding:14px;border:1px solid #fff;background:#fff;color:#000;cursor:pointer;font:600 16px Cairo;border-radius:3px}.login-btn:disabled{opacity:.6;cursor:wait}.msg{min-height:24px;margin-top:16px;text-align:center;color:#e8e8e8}.back{display:block;text-align:center;margin-top:22px;color:#aaa;text-decoration:none}
+</style></head><body>
+<main class="login-page"><section class="login-box"><img src="./logo-dezn.jpg" class="login-logo" alt="DEZN">
+<h1>تسجيل الدخول</h1><p class="hint">لوحة إدارة محتوى DEZN</p>
+<form id="loginForm"><label for="email">البريد الإلكتروني</label><input id="email" type="email" autocomplete="email" required>
+<label for="password">كلمة المرور</label><input id="password" type="password" autocomplete="current-password" required>
+<button class="login-btn" id="submitBtn" type="submit">دخول</button><div class="msg" id="msg" role="alert"></div></form>
+<a class="back" href="./index.html">العودة للموقع</a></section></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="./supabase-config.js"></script>
+<script>
+const cfg=window.DEZN_SUPABASE_CONFIG||{};const client=window.supabase.createClient(cfg.url,cfg.anonKey);
+client.auth.getSession().then(({data})=>{if(data.session)location.href='./admin.html';});
+const form=document.getElementById('loginForm'),msg=document.getElementById('msg'),btn=document.getElementById('submitBtn');
+form.addEventListener('submit',async e=>{e.preventDefault();msg.textContent='جارٍ تسجيل الدخول...';btn.disabled=true;
+const {error}=await client.auth.signInWithPassword({email:document.getElementById('email').value.trim(),password:document.getElementById('password').value});
+if(error){msg.textContent='بيانات الدخول غير صحيحة أو الحساب غير مفعّل.';btn.disabled=false;return}location.href='./admin.html';});
+</script></body></html>
